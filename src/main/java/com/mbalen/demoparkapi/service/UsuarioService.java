@@ -1,6 +1,7 @@
 package com.mbalen.demoparkapi.service;
 
 import com.mbalen.demoparkapi.entity.Usuario;
+import com.mbalen.demoparkapi.exception.PasswordInvalidException;
 import com.mbalen.demoparkapi.exception.UsernameDoesntExist;
 import com.mbalen.demoparkapi.exception.UsernameUniqueValueException;
 import com.mbalen.demoparkapi.repository.UsuarioRepository;
@@ -48,15 +49,17 @@ public class UsuarioService {
     }
     @Transactional
     public Usuario atualizarUserPorId(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
-        if(!novaSenha.equals(confirmaSenha)){
-            throw new RuntimeException("Nova senha não confere com a confirmação de senha");
-        }
-        Usuario user = buscarPorID(id);
-        if(!user.getPassword().equals(senhaAtual)){
-            throw new RuntimeException("Senha não confere com a senha atual!");
-        }
-        user.setPassword(novaSenha);
-        return user;
+
+            if(!novaSenha.equals(confirmaSenha)){
+                throw new PasswordInvalidException("Nova senha não confere com a confirmação de senha");
+            }
+            Usuario user = buscarPorID(id);
+            if(!user.getPassword().equals(senhaAtual)){
+                throw new PasswordInvalidException("Senha não confere com a senha atual!");
+            }
+            user.setPassword(novaSenha);
+            return user;
+
     }
     @Transactional(readOnly = true)
     public Usuario buscarPorNome(String username) {
