@@ -1,6 +1,8 @@
 package com.mbalen.demoparkapi.service;
 
 import com.mbalen.demoparkapi.entity.Usuario;
+import com.mbalen.demoparkapi.exception.UsernameDoesntExist;
+import com.mbalen.demoparkapi.exception.UsernameUniqueValueException;
 import com.mbalen.demoparkapi.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,13 +18,20 @@ public class UsuarioService {
 
     @Transactional
     public Usuario salvar(Usuario usuario){
-        return usuarioRepository.save(usuario);
+        try {
+            return usuarioRepository.save(usuario);
+        } catch (org.springframework.dao.DataIntegrityViolationException error){
+            throw new UsernameUniqueValueException(String.format("Username '%s' já cadastrado", usuario.getUsername()));
+        }
+
     }
     @Transactional(readOnly = true) //Exclusivo para uma consulta ao banco de dados
     public Usuario buscarPorID(Long id) {
-        return usuarioRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Usuario não encontrado!")
-        );
+        try {
+            return usuarioRepository.findById(id).get();
+        } catch (java.lang.RuntimeException error){
+            throw new UsernameDoesntExist(String.format("Usuário não existente!"));
+        }
     }
 
     @Transactional
