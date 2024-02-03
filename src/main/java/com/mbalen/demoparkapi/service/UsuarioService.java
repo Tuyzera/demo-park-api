@@ -3,10 +3,10 @@ package com.mbalen.demoparkapi.service;
 import com.mbalen.demoparkapi.entity.Usuario;
 import com.mbalen.demoparkapi.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor //Criar um metodo construtor com a variavel usuario repository
@@ -23,5 +23,33 @@ public class UsuarioService {
         return usuarioRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Usuario não encontrado!")
         );
+    }
+
+    @Transactional
+    public Usuario deleteUserPorID(Long id) {
+        Usuario user = buscarPorID(id);
+        if(user != null){
+            usuarioRepository.deleteById(id);
+        }
+        return user;
+    }
+
+    public List<Usuario> getAllUsers() {
+        return usuarioRepository.findAll();
+    }
+    @Transactional
+    public Usuario atualizarUserPorId(Long id, String fieldUpdate) {
+        Usuario user = buscarPorID(id);
+        user.setPassword(fieldUpdate);
+        return user;
+    }
+    @Transactional(readOnly = true)
+    public Usuario buscarPorNome(String username) {
+        return this.usuarioRepository.findByUsername(username);
+    }
+
+    public List<Usuario> getUserByRole(String role) {
+        Usuario.Role roles = Usuario.Role.valueOf(role.toUpperCase());
+        return this.usuarioRepository.findByRole(roles);
     }
 }
