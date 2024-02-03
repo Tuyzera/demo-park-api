@@ -23,11 +23,11 @@ public class Carro implements Serializable {
     private Modelo modelo;
 
     public enum Modelo{
-        SUV, Picapes, Crossover, Minivan, Esportivo, Sedan
+        SUV, Picapes, Crossover, Minivan, Esportivo, Sedan;
     }
 
     @Column(name = "ano", nullable = false)
-    private String ano;
+    private long ano;
 
     @Column(name = "marca", nullable = false)
     private String marca;
@@ -35,11 +35,15 @@ public class Carro implements Serializable {
     @Column(name = "cor", nullable = false)
     private String cor;
 
+    @Column(name = "preco", nullable = false)
+    private long preco;
+
     @Column(name = "proprietario")
     private String proprietario;
 
     @Column(name = "proprietario_cpf")
     private String proprietario_cpf;
+
 
 
 }
