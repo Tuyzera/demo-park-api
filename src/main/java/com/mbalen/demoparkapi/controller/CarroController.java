@@ -1,5 +1,8 @@
 package com.mbalen.demoparkapi.controller;
 
+import com.mbalen.demoparkapi.controller.dto.CarroResponseDTO;
+import com.mbalen.demoparkapi.controller.dto.mapper.CarroMapper;
+import com.mbalen.demoparkapi.controller.dto.CarroResponseMarcasDTO;
 import com.mbalen.demoparkapi.entity.Carro;
 import com.mbalen.demoparkapi.service.CarroService;
 import lombok.RequiredArgsConstructor;
@@ -32,4 +35,23 @@ public class CarroController {
         List<Carro> car = this.service.getByYear(ano);
         return ResponseEntity.ok(car);
     }
+
+    @GetMapping("/marca/{marca}")
+    public ResponseEntity<List<Carro>> getByMarca(@PathVariable String marca){
+        List<Carro> car = this.service.getByMarca(marca);
+        return ResponseEntity.ok(car);
+    }
+
+    @GetMapping("/marcas")
+    public ResponseEntity<List<CarroResponseMarcasDTO>> getAllMarcas(){
+        List<Carro> cars = this.service.getAllMarcas();
+        return ResponseEntity.ok(CarroMapper.toMarcaDTOList(cars));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<CarroResponseDTO>> getAllCarros(){
+        List<Carro> cars = this.service.getAllCarros();
+        return ResponseEntity.ok(CarroMapper.toDtoList(cars));
+    }
+
 }

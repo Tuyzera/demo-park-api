@@ -26,4 +26,16 @@ public class CarroService {
     public List<Carro> getByYear(Long ano) {
         return this.repository.findByAno(ano);
     }
+
+    public List<Carro> getByMarca(String marca) {
+        return this.repository.findByMarca(marca);
+    }
+
+    public List<Carro> getAllMarcas() {
+        return this.repository.findAll();
+    }
+
+    public List<Carro> getAllCarros() {
+        return this.repository.findAll();
+    }
 }

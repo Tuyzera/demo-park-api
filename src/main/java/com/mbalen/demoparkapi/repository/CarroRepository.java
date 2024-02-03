@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CarroRepository extends JpaRepository<Carro, Long> {
     List<Carro> findByAno(Long ano);
+
+    List<Carro> findByMarca(String marca);
 }

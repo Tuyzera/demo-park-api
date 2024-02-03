@@ -38,9 +38,15 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
     @Transactional
-    public Usuario atualizarUserPorId(Long id, String fieldUpdate) {
+    public Usuario atualizarUserPorId(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
+        if(!novaSenha.equals(confirmaSenha)){
+            throw new RuntimeException("Nova senha não confere com a confirmação de senha");
+        }
         Usuario user = buscarPorID(id);
-        user.setPassword(fieldUpdate);
+        if(!user.getPassword().equals(senhaAtual)){
+            throw new RuntimeException("Senha não confere com a senha atual!");
+        }
+        user.setPassword(novaSenha);
         return user;
     }
     @Transactional(readOnly = true)
